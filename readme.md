@@ -25,6 +25,7 @@ Only you can prevent duplicate `conda` installs.
 *********************
 ***The following operations will install conda on your machine, so make sure this is what you want to do.***
 1. Download this repository as a .zip file
+    ![Download repo as zip.](img/download_zip_cursor.png)
 2. Extract it
 3. Open the extracted directory
 4. Double click the .bat file to install conda
