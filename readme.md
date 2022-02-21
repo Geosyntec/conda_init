@@ -28,12 +28,13 @@ Only you can prevent duplicate `conda` installs.
     ![Download repo as zip.](img/download_zip_cursor.png)
 2. Extract it
 3. Open the extracted directory
-4. Double click the .bat file to install conda
+4. Double click the "install_miniconda_for_user.bat" file to install conda
+   - If a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
    - This will install miniconda on your machine for your user profile.
    - The `conda` command will be available from the cmd prompt because it will be appended to your user PATH variable.
    - The location is %UserProfile%\miniconda3.
      Normalizing this install location allows IT to find this directory and white-list certain processes if needed.
-5. Open a command prompt and try it out.
+5. Open a new command prompt and try it out.
     One way to do so is to click your start menu and type `cmd`, then click Command Prompt. 
     That should allow you to check if the install worked by running the following command:
    
@@ -97,18 +98,6 @@ Then we just launch a jupyter notebook and start working:
 (rca) >jupyter notebook
 ```
 
-### Install other libraries into an env
-There will likely come a time when you need to do add libraries to your existing `conda` env. 
-
-Simply activate the environment that you wish to modify, and install the libraries:
-```shell
-> conda activate rca
-(rca) >conda install geopandas -c conda-forge
-```
-The above command will install the `geopandas` library and all of its dependencies into the current environment.
-The "-c conda-forge" ensures that all the libraries are fully compatible with eachother and with the libraries already installed within the current environment. 
-This is one of the main advantages to using `conda` is that for tricky packages like `geopandas` conda will help resolve package conflicts and ensure that the environment 'just works'.
-
 ### Save and restore an env
 It's important to be able to save a record of your packages so that others (or you) are able to recreate it.
 
@@ -121,6 +110,21 @@ There is also a `conda`` command to support creating a new environment from a en
 ```shell
 >conda env create -f rca_env.yml -n rca
 ```
+
+### Install other libraries into an env
+There will likely come a time when you need to do add libraries to your existing `conda` env. 
+
+Simply activate the environment that you wish to modify, and install the libraries:
+```shell
+> conda activate rca
+(rca) >conda install geopandas -c conda-forge
+```
+The above command will install the `geopandas` library and all of its dependencies into the current environment.
+The "-c conda-forge" ensures that all the libraries are fully compatible with eachother and with the libraries already installed within the current environment. 
+This is one of the main advantages to using `conda` is that for tricky packages like `geopandas` conda will help resolve package conflicts and ensure that the environment 'just works'.
+
+Sometimes it's really helpful to run `conda env export` prior to installing or updating your libraries.
+Keep that in mind in case your update breaks some of your old code and you need to try to track down the cause.
 
 ## How to `arcpy` (if you must)
 
@@ -143,7 +147,7 @@ To activate the ArcGIS Pro environment use:
 >c:\Progra~1\ArcGIS\Pro\bin\Python\scripts\proenv.bat
 ```
 
-If you want to run an `arcpy` enabled jupyter notebook, simply run the above command to activate the `arcgispro-py3` environment and type `jupyter notebook`.
+If you want to run an `arcpy` enabled jupyter notebook, simply `cd` to the directory containing the notebook file, run the above command to activate the `arcgispro-py3` environment, and then type `jupyter notebook`.
 
 Consult ESRI's [documentation](https://pro.arcgis.com/en/pro-app/latest/arcpy/get-started/work-with-python-environments.htm) for other advanced features about the ArcGIS Pro environment, including cloning and installing new packages. 
 This is not necessary for nearly all use cases involving `arcpy`, but if you want to explore options, see their docs.
