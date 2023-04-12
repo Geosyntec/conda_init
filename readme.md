@@ -28,13 +28,32 @@ Only you can prevent duplicate `conda` installs.
     ![Download repo as zip.](img/download_zip_cursor.png)
 2. Extract it
 3. Open the extracted directory
-4. Double click the "install_miniconda_for_user.bat" file to install conda
+4. Rename the file `install_miniconda_for_user.txt` to `install_miniconda_for_user.bat`. 
+   If this makes you squeamish - which is not unreasonable - here are the contents of the file:
+
+    ```bash
+    @echo off
+    echo Checking if miniconda3 already exists for this user...
+    if exist %UserProfile%\miniconda3 (
+        echo miniconda3 already exists for this user, exiting without modifying the system...
+        pause
+        EXIT /B
+    ) else (
+        echo installing conda...
+        start /wait "" Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
+        echo installation complete.
+    )
+    pause
+    ```
+    The line that does all the action is below, and you may run it yourself from the terminal if you wish (and then skip the next step which is to run the .bat):
+    `start /wait "" Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3`
+5. Double click the "install_miniconda_for_user.bat" file to install conda
    - If a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
    - This will install miniconda on your machine for your user profile.
    - The `conda` command will be available from the cmd prompt because it will be appended to your user PATH variable.
    - The location is %UserProfile%\miniconda3.
      Normalizing this install location allows IT to find this directory and white-list certain processes if needed.
-5. Open a new command prompt and try it out.
+6. Open a new command prompt and try it out.
     One way to do so is to click your start menu and type `cmd`, then click Command Prompt. 
     That should allow you to check if the install worked by running the following command:
    
