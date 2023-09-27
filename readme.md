@@ -61,12 +61,20 @@ Only you can prevent duplicate `conda` installs.
     >conda --version
     conda 4.11.0
     ```
-    If it worked you'll see the `conda` version. If it failed with
+    If it worked you'll see the `conda` version, or you'll be prompted to run `conda init` and try again.
+    If it failed with
     ```shell
     'conda' is not recognized as an internal or external command, operable program or batch file.
     ``` 
     Then you have not successfully installed conda on your system.
     If something else happened, you are on your own.
+7. _**Optional**_ finish setting up `conda` with the following:
+   ```
+   >conda update -n base conda
+   >conda install -n base conda-libmamba-solver
+   >conda config --set solver libmamba
+   ```
+   This will ensure you're running on the latest conda release, and that you're using the optimized dependency solver that's >6x faster than the default.
 
 ## How to `conda`
 
