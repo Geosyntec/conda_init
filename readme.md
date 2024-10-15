@@ -28,8 +28,8 @@ Only you can prevent duplicate `conda` installs.
     ![Download repo as zip.](img/download_zip_cursor.png)
 2. Extract it
 3. Open the extracted directory
-4. Rename the file `install_miniconda_for_user.txt` to `install_miniconda_for_user.bat`. 
-   If this makes you squeamish - which is not unreasonable - here are the contents of the file:
+4. Rename the file `install_latest_miniconda_for_user.txt` to `install_latest_miniconda_for_user.bat`. 
+   If this makes you squeamish - which is not unreasonable - here are the contents of the file (you can/should check them yourself before running the .bat) which you can run manually in cmd prompt if you prefer:
 
     ```bash
     @echo off
@@ -40,14 +40,16 @@ Only you can prevent duplicate `conda` installs.
         EXIT /B
     ) else (
         echo installing conda...
-        start /wait "" Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
+        curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe
+        start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
         echo installation complete.
     )
     pause
     ```
-    The line that does all the action is below, and you may run it yourself from the terminal if you wish (and then skip the next step which is to run the .bat):
-    `start /wait "" Miniconda3-latest-Windows-x86_64.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3`
-5. Double click the "install_miniconda_for_user.bat" file to install conda
+    The lines that do all the action are below, and you may run them yourself from the terminal if you wish (and then skip the next step which is to run the .bat):
+    `curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe`
+    `start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3`
+5. Double click the "install_latest_miniconda_for_user.bat" file to install conda
    - If a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
    - This will install miniconda on your machine for your user profile.
    - The `conda` command will be available from the cmd prompt because it will be appended to your user PATH variable.
@@ -92,7 +94,7 @@ Let's also install jupyter so we can do our exploratory analysis from `jupyter n
 We can handle all this with a single command:
 
 ```shell
->conda create -n rca python=3.9 pandas scipy matplotlib jupyter
+>conda create -n rca python=3.11 pandas scipy matplotlib jupyter
 ```
 
 ### Activate an env
