@@ -9,5 +9,10 @@ if exist %UserProfile%\miniconda3 (
 	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe
 	start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
 	echo installation complete.
+	echo configuring conda channels...
+	conda config --remove channels defaults
+	conda config --add channels nodefaults
+	conda config --add channels conda-forge
+	echo conda channel configuration complete.
 )
 pause
