@@ -1,18 +1,16 @@
 @echo off
-echo Checking if miniconda3 already exists for this user...
-if exist %UserProfile%\miniconda3 (
-	echo miniconda3 already exists for this user, exiting without modifying the system...
+echo Checking if miniforge3 already exists for this user...
+if exist %UserProfile%\miniforge3 (
+	echo miniforge3 already exists for this user, exiting without modifying the system...
 	pause
 	EXIT /B
 ) else (
 	echo installing conda...
-	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe
-	start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
+	curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe -o miniforge3.exe
+	start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=0 /S /D=%UserProfile%\miniforge3
 	echo installation complete.
-	echo configuring conda channels...
-	conda config --remove channels defaults
-	conda config --add channels nodefaults
-	conda config --add channels conda-forge
-	echo conda channel configuration complete.
+	echo initializing conda for cmd prompt...
+	%USERPROFILE%\miniforge3\condabin\conda init cmd.exe
+	echo initialization complete.
 )
 pause
