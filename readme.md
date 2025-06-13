@@ -2,28 +2,87 @@
 
 This repository should help bootstrap new users of `conda` for managing programming environments.
 
-No knowledge of `git` is required (though it is strongly recommended) to use this repository.
+If you do not have conda or anaconda on your machine, download this repo as a zip, prep & run the .bat, profit.
+[Jump to Installation guide.](#installation)
 
-_TLDR: If you have conda on your machine, you're good to go. If not, download this repo as a zip, click the .bat, profit._
+**If you do already have miniconda or Anaconda on your machine, you need to plan to migrate away from those tools** and onto this one.
+While you're here, look through the migration guide:
+
+### Migration Guide
+
+1. Check if you're conda is in compliance with our license policies.
+
+   ```
+   conda config --show channels
+   ```
+
+   ```output
+   channels:
+     - conda-forge
+     - nodefaults
+   ```
+
+   If you see channels including `defaults` and `anaconda` then you are out of compliance and you are required to pay for a license.
+   If you see any other channels and they're related to python packages (like `plotly` or `arcgis`) you should remove them.
+   You can always specify the channel during installation if it's necessary, there's no need to add vendor or package-specific channels to your conda config.
+   If you see the `r` channel (good for you using `r`!) consider removing it too.
+   The `r` community moved to conda-forge in v3.6.2 (check yourself by running `conda search -c r -c conda-forge r-base`).
+
+2. Disable the (unnecessary) channels that require an expensive license.
+
+   Run these one at a time, if the channels don't exist, the command will error but you should keep marching through this list.
+
+   ```
+   conda activate base
+   ```
+
+   ```
+   conda config --remove channels defaults
+   ```
+
+   ```
+   conda config --remove channels anaconda
+   ```
+
+   ```
+   conda config --add channels nodefaults
+   ```
+
+   ```
+   conda config --add channels conda-forge
+   ```
+
+   After this command, _new_ python environments will be in compliance with the anaconda license, but old ones, including 'base' and 'anaconda' still might not.
+
+3. Backup your current environments using this [conda-env-backup](https://github.com/Geosyntec/conda-env-backup) tool.
+   It runs with no dependencies, so you can simply download the zip or copy the python file and run it in your 'base' conda environment.
+   This will create a directory filled with folders, one for each environment.
+   Each folder will have several txt files with all the packages and their versions.
+   These files can help you rebuild your envs exactly as they are after you migrate to the miniforge variant of conda.
+
+4. This is the big one: Remove all of your conda environments and start fresh with miniforge.
+   You can do this by uninstalling Anaconda or miniconda via the "Apps>Installed Apps" panel in "Settings" or (if/when that doesn't work) via the old "Programs and Features" panel in "Control Panel".
+   If these don't work, try again with admin privileges.
+   If you're still unable to remove these programs, open a ticket and contact IT.
+
+5. Proceed with the installation steps below.
 
 ## Installation
 
----
-
-**_Only do this if you have not previously installed `conda` on your machine._**
+**_Only do this if you do not have `conda` installed on your machine._**
 
 To see if you have conda, type the following into your command prompt:
 
 ```
->conda --version
+conda --version
 ```
 
-If you see a version number, you should skip to the "How To `conda`" section.
+If you see a version number, you should [check that you're in compliance](#migration-guide) and then skip to the "How To `conda`" section.
 If you see an error, then you probably need to install conda on your machine or add it to your path.
 
 To be extra sure, search your start menu for 'anaconda', 'miniconda' and 'conda' to make sure the application is not installed on your machine.
 
-Only you can prevent duplicate `conda` installs.
+Only 🫵 can prevent duplicate `conda` installs.
 
 ---
 
@@ -36,49 +95,60 @@ Only you can prevent duplicate `conda` installs.
 4. Rename the file `install_latest_miniconda_for_user.txt` to `install_latest_miniconda_for_user.bat`.
    If this makes you squeamish - which is not unreasonable - here are the contents of the file (you can/should check them yourself before running the .bat) which you can run manually in cmd prompt if you prefer:
 
-   ```
+   ```cmd
    @echo off
-   echo Checking if miniconda3 already exists for this user...
-   if exist %UserProfile%\miniconda3 (
-       echo miniconda3 already exists for this user, exiting without modifying the system...
-       pause
-       EXIT /B
+   echo Checking if miniforge3 already exists for this user...
+   if exist %UserProfile%\miniforge3 (
+      echo miniforge3 already exists for this user, exiting without modifying the system...
+      pause
+      EXIT /B
    ) else (
-       echo installing conda...
-       curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe
-       start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3
-       echo installation complete.
-       echo configuring conda channels
-       conda config --remove channels defaults
-       conda config --add channels nodefaults
-       conda config --add channels conda-forge
+      echo installing conda via miniforge (aka license-free and open source!)...
+      curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe -o miniforge3.exe
+      start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
+      echo installation complete.
+      echo initializing conda for cmd prompt...
+      %USERPROFILE%\miniforge3\condabin\conda init cmd.exe
+      echo initialization complete.
    )
    pause
    ```
 
-   The lines that do all the action are below, and you may run them yourself from the terminal if you wish (and then skip the next step which is to run the .bat):
-   `curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o miniconda.exe`
-   `start /wait "" .\miniconda.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniconda3`
+   The lines that do all the action are below, and you may run them yourself from the terminal if you wish (and then **skip** the next step which runs these commands in the .bat):
+
+   From windows command prompt:
+
+   ```cmd
+   curl -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
+   ```
+
+   ```cmd
+   start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
+   ```
 
 5. Double click the "install_latest_miniconda_for_user.bat" file to install conda
    - If a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
+     This is "safe" because you read and understand everything the .bat file is doing.
    - This will install miniconda on your machine for your user profile.
    - The `conda` command will be available from the cmd prompt because it will be appended to your user PATH variable.
-   - The location is %UserProfile%\miniconda3.
+   - The location is "%UserProfile%\miniforge3".
      Normalizing this install location allows IT to find this directory and white-list certain processes if needed.
 6. Open a new command prompt and try it out.
    One way to do so is to click your start menu and type `cmd`, then click Command Prompt.
    That should allow you to check if the install worked by running the following command:
 
+   ```cmd
+   conda --version
    ```
-   >conda --version
-   conda 4.11.0
+
+   ```output
+   conda 25.5.1
    ```
 
    If it worked you'll see the `conda` version, or you'll be prompted to run `conda init` and try again.
    If it failed with
 
-   ```
+   ```output
    'conda' is not recognized as an internal or external command, operable program or batch file.
    ```
 
@@ -86,16 +156,14 @@ Only you can prevent duplicate `conda` installs.
    If something else happened, you are on your own.
 
 7. _**Optional**_ finish setting up `conda` with the following:
+   ```cmd
+   conda update -n base conda, mamba
    ```
-   >conda update -n base conda
-   >conda install -n base conda-libmamba-solver
-   >conda config --set solver libmamba
-   ```
-   This will ensure you're running on the latest conda release, and that you're using the optimized dependency solver that's >6x faster than the default.
+   This will ensure you're running on the latest conda release.
 
 ## How to `conda`
 
-Always create a `conda` environment for new projects that you work on.
+**Always** create a `conda` environment for new projects that you work on.
 This will allow you to properly 'silo' the libraries you install so that as you assist with more and more projects you're still able to return to old project environments and run the code with the libraries that worked for your project when it was written.
 It also helps your peers recreate the project python environment on their machine during peer review or just in case you get hit by a train and are unable to work on your important project from the hospital.
 
@@ -109,21 +177,21 @@ Let's also install jupyter so we can do our exploratory analysis from `jupyter n
 
 We can handle all this with a single command:
 
-```
->conda create -n rca python=3.11 pandas scipy matplotlib jupyter
+```cmd
+conda create -n rca python=3.11 pandas scipy matplotlib jupyter
 ```
 
 ### Activate an env
 
 Now all we need to do is to activate the env:
 
-```
->conda activate rca
+```cmd
+conda activate rca
 ```
 
 Now your command prompt looks something like this:
 
-```
+```cmd
 (rca) >
 ```
 
@@ -136,19 +204,19 @@ Changing to the project directory might like this, for example:
 
 Switch to a network drive:
 
-```
+```cmd
 (rca) >P:
 ```
 
 Then change to the project directory (i.e., `cd`):
 
-```
+```cmd
 (rca) >cd "P:/some/path/to/projects/Regional Climate Assessment/Technical Analysis"
 ```
 
 Then we just launch a jupyter notebook and start working:
 
-```
+```cmd
 (rca) >jupyter notebook
 ```
 
@@ -156,16 +224,16 @@ Then we just launch a jupyter notebook and start working:
 
 It's important to be able to save a record of your packages so that others (or you) are able to recreate it.
 
-There is a `conda`` command to support saving your environment to a file:
+There is a `conda` command to support saving your environment to a file:
 
-```
->conda env export -n rca --no-builds > rca_env.yml
+```cmd
+conda env export -n rca --no-builds > rca_env.yml
 ```
 
-There is also a `conda`` command to support creating a new environment from a environment yml file:
+There is also a `conda` command to support creating a new environment from a environment yml file:
 
-```
->conda env create -f rca_env.yml -n rca
+```cmd
+conda env create -f rca_env.yml -n rca
 ```
 
 ### Install other libraries into an env
@@ -174,8 +242,8 @@ There will likely come a time when you need to do add libraries to your existing
 
 Simply activate the environment that you wish to modify, and install the libraries:
 
-```
-> conda activate rca
+```cmd
+conda activate rca
 (rca) >conda install geopandas -c conda-forge
 ```
 
@@ -200,13 +268,13 @@ ESRI's fancy new multi-core modern desktop application, ArcGIS Pro, loves `conda
 
 To use ArcGIS Pro's python when running standalone scripts that need `arcpy` use:
 
-```
+```cmd
 >c:\Progra~1\ArcGIS\Pro\bin\Python\scripts\propy.bat my_script.py
 ```
 
 To activate the ArcGIS Pro environment use:
 
-```
+```cmd
 >c:\Progra~1\ArcGIS\Pro\bin\Python\scripts\proenv.bat
 ```
 
@@ -217,14 +285,18 @@ This is not necessary for nearly all use cases involving `arcpy`, but if you wan
 
 ### ArcMap 10.x
 
+Firstly, don't.
 If you're still using ArcMap, consider starting to use ArcGIS Pro.
 
 If that is not an option for you or your project, use the following command to execute the (long ago deprecated and abandoned) python 2.7 executable that ESRI ships with ArcMap 10.x:
 
-```
+```cmd
 >c:\python27\ArcGIS10.7\python.exe my_script.py
 ```
 
 You'll probably need to adjust the path above if you're using a different version of ArcMap.
+
+If your clients require ArcMap, notify them immediately that it will be fully retired (no security updates) on March 1, 2026 and that the clock is ticking.
+After that date we will likely not be able to run the software for them and comply with our other software security requirements.
 
 Lastly, if you're still using ArcMap, consider starting to use ArcGIS Pro.
