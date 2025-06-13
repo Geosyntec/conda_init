@@ -1,16 +1,56 @@
 @echo off
-echo Checking if miniforge3 already exists for this user...
+echo Checking if conda already exists for this user...
 if exist %UserProfile%\miniforge3 (
-	echo miniforge3 already exists for this user, exiting without modifying the system...
-	pause
-	EXIT /B
+	echo you have miniforge3 installed. Yay!
+	goto condaexists
+) else if exist %UserProfile%\AppData\Local\miniforge3 (
+	echo you have miniforge3 installed. Yay!
+	goto condaexists
+) else if exist %UserProfile%\miniconda3 (
+	echo you have miniconda3 installed.
+	goto badconda
+) else if exist %UserProfile%\AppData\Local\miniconda3 (
+	echo you have miniconda3 installed.
+	goto badconda
+) else if exist C:\ProgramData\miniconda3 (
+	echo miniconda is installed for all users. Please uninstall it and migrate to miniforge3.
+	goto badconda
+) else if exist %UserProfile%\anaconda3 (
+	echo you have Anaconda installed. Please uninstall it and migrate to miniforge3.
+	goto badconda
+) else if exist %UserProfile%\AppData\Local\anaconda3 (
+	echo Anaconda installed. Please uninstall it and migrate to miniforge3.
+	goto badconda
+) else if exist C:\ProgramData\anaconda3 (
+	echo Anaconda is installed for all users. Please uninstall it and migrate to miniforge3.
+	goto badconda
+
 ) else (
-	echo installing conda...
-	curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe -o miniforge3.exe
-	start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=0 /S /D=%UserProfile%\miniforge3
-	echo installation complete.
-	echo initializing conda for cmd prompt...
-	%USERPROFILE%\miniforge3\condabin\conda init cmd.exe
-	echo initialization complete.
+	conda --version
+   	if errorlevel 1 goto :installminiforge
+	goto condaexists
 )
+
+:installminiforge
+echo installing conda via miniforge (aka license-free and open source!)...
+curl -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
+start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
+echo installation complete.
+echo initializing conda for cmd prompt...
+%USERPROFILE%\miniforge3\condabin\conda init cmd.exe
+echo initialization complete.
+goto commonexit
+
+:badconda
+echo Remove 'defaults' and 'anaconda' from your channels today
+echo and migrate to miniforge3 via these instructions:
+echo "https://github.com/Geosyntec/conda_init"
+goto commonexit
+
+:condaexists
+echo conda already exists for this user, exiting without modifying the system.
+goto commonexit
+
+:commonexit
 pause
+exit /b
