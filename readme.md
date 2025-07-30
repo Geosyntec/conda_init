@@ -93,7 +93,7 @@ Only 🫵 can prevent duplicate `conda` installs.
 2. Extract it
 3. Open the extracted directory
 4. Rename the file `install_latest_miniconda_for_user.txt` to `install_latest_miniconda_for_user.bat`.
-   If this makes you squeamish - which is not unreasonable - here are the contents of the file (you can/should check them yourself before running the .bat) which you can run manually in cmd prompt if you prefer:
+   If this makes you squeamish - which is not unreasonable - here are the main brains of the file (you can/should check them yourself before running the .bat) which you can run manually in cmd prompt if you prefer:
 
    ```cmd
    @echo off
