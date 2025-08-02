@@ -157,7 +157,7 @@ Only 🫵 can prevent duplicate `conda` installs.
 
 7. _**Optional**_ finish setting up `conda` with the following:
    ```cmd
-   conda update -n base conda, mamba
+   conda update -n base conda mamba
    ```
    This will ensure you're running on the latest conda release.
 
