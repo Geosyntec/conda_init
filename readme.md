@@ -60,12 +60,34 @@ While you're here, look through the migration guide:
    Each folder will have several txt files with all the packages and their versions.
    These files can help you rebuild your envs exactly as they are after you migrate to the miniforge variant of conda.
 
-4. This is the big one: Remove all of your conda environments and start fresh with miniforge.
+4. Identify and remove any/all ".condarc" files.
+   Locate these files with:
+
+   ```cmd
+   conda config --show-sources​
+   ```
+
+   ```output
+   ==> C:\Users\<USERPROFILE>\miniforge3\.condarc <==
+   channels:
+   - conda-forge
+
+   ==> C:\Users\<USERPROFILE>\.condarc <==
+   channels:
+   - conda-forge
+   - nodefaults
+   solver: libmamba
+   ```
+
+   If you see any other channels listed in either of your ".condarc" files then please delete your files before going to the next step.
+   These files are not removed by the uninstallation process, so please identify and remove them manually now if they have extra channels set.
+
+5. This is the big one: Remove all of your conda environments and start fresh with miniforge.
    You can do this by uninstalling Anaconda or miniconda via the "Apps>Installed Apps" panel in "Settings" or (if/when that doesn't work) via the old "Programs and Features" panel in "Control Panel".
    If these don't work, try again with admin privileges.
    If you're still unable to remove these programs, open a ticket and contact IT.
 
-5. Proceed with the installation steps below.
+6. Proceed with the installation steps below.
 
 ## Installation
 
