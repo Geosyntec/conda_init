@@ -2,8 +2,7 @@
 
 This repository should help bootstrap new users of `conda` for managing programming environments.
 
-If you do not have conda or anaconda on your machine, download this repo as a zip, prep & run the .bat, profit.
-[Jump to Installation guide.](#installation)
+If you do not have conda or anaconda on your machine, [jump to Installation guide.](#installation)
 
 **If you do already have miniconda or Anaconda on your machine, you need to plan to migrate away from those tools** and onto this one.
 While you're here, look through the migration guide:
@@ -68,11 +67,11 @@ While you're here, look through the migration guide:
    ```
 
    ```output
-   ==> C:\Users\<USERPROFILE>\miniforge3\.condarc <==
+   ==> C:\Users\<UserProfile>\miniforge3\.condarc <==
    channels:
    - conda-forge
 
-   ==> C:\Users\<USERPROFILE>\.condarc <==
+   ==> C:\Users\<UserProfile>\.condarc <==
    channels:
    - conda-forge
    - nodefaults
@@ -110,29 +109,25 @@ Only 🫵 can prevent duplicate `conda` installs.
 
 **_The following operations will install conda on your machine, so make sure this is what you want to do._**
 
-1. Download this repository as a .zip file
-   ![Download repo as zip.](img/download_zip_cursor.png)
-2. Extract it
-3. Open the extracted directory
-4. Rename the file `install_latest_miniconda_for_user.txt` to `install_latest_miniconda_for_user.bat`.
-   If this makes you squeamish - which is not unreasonable - here are the main brains of the file (you can/should check them yourself before running the .bat) which you can run manually in cmd prompt if you prefer:
+1. Using the web browser, click the link to the `install_latest_miniforge_for_user.txt` and review its contents.
+2. Copy the contents of the file `install_latest_miniforge_for_user.txt` to a new bat file on your machine.
+   You might name it `install_latest_miniforge_for_user.bat`.
+   If this makes you squeamish - which is not unreasonable - here are the main brains of the file (you can/should check them yourself before running the .bat) but you can run them manually in cmd prompt if you prefer:
 
    ```cmd
    @echo off
-   echo Checking if miniforge3 already exists for this user...
-   if exist %UserProfile%\miniforge3 (
-      echo miniforge3 already exists for this user, exiting without modifying the system...
-      pause
-      EXIT /B
-   ) else (
-      echo installing conda via miniforge (aka license-free and open source!)...
-      curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe -o miniforge3.exe
-      start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
-      echo installation complete.
-      echo initializing conda for cmd prompt...
-      %USERPROFILE%\miniforge3\condabin\conda init cmd.exe
-      echo initialization complete.
-   )
+   echo installing conda via miniforge (aka license-free and open source!)...
+
+   curl -k -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
+
+   start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
+
+   echo installation complete.
+   echo initializing conda for cmd prompt...
+
+   %UserProfile%\miniforge3\condabin\conda init cmd.exe
+
+   echo initialization complete.
    pause
    ```
 
@@ -141,21 +136,24 @@ Only 🫵 can prevent duplicate `conda` installs.
    From windows command prompt:
 
    ```cmd
-   curl -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
+   curl -k -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
    ```
 
    ```cmd
    start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
    ```
 
-5. Double click the "install_latest_miniconda_for_user.bat" file to install conda
-   - If a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
+3. Installation process notes:
+
+   - When using the '.bat' method, if a blue pop up appears that indicates that Windows is protecting your PC by blocking a the .bat file from running, click 'More Info' and then 'Run Anyway'.
      This is "safe" because you read and understand everything the .bat file is doing.
    - This will install miniconda on your machine for your user profile.
+     It should therefore _not_ require administrative privileges.
    - The `conda` command will be available from the cmd prompt because it will be appended to your user PATH variable.
-   - The location is "%UserProfile%\miniforge3".
+   - The location of the application data (e.g., python environments) is "%UserProfile%\miniforge3".
      Normalizing this install location allows IT to find this directory and white-list certain processes if needed.
-6. Open a new command prompt and try it out.
+
+4. Open a new command prompt and try it out.
    One way to do so is to click your start menu and type `cmd`, then click Command Prompt.
    That should allow you to check if the install worked by running the following command:
 
@@ -177,7 +175,38 @@ Only 🫵 can prevent duplicate `conda` installs.
    Then you have not successfully installed conda on your system.
    If something else happened, you are on your own.
 
-7. _**Optional**_ finish setting up `conda` with the following:
+5. Double check the channels set within your ".condarc" files.
+   Locate these files with:
+
+   ```cmd
+   conda config --show-sources​
+   ```
+
+   ```output
+   ==> C:\Users\<UserProfile>\miniforge3\.condarc <==
+   channels:
+   - conda-forge
+
+   ==> C:\Users\<UserProfile>\.condarc <==
+   channels:
+   - conda-forge
+   - nodefaults
+   solver: libmamba
+   ```
+
+   If you see any other channels listed in either of your ".condarc" files then please delete your ".condarc" files.
+   These files will be automatically re-created for you with the correct default channels (i.e., conda-forge).
+   The following commands can be run after removing the ".condarc" files in order to set the proper channels:
+
+   ```
+   conda config --add channels nodefaults
+   ```
+
+   ```
+   conda config --add channels conda-forge
+   ```
+
+6. _**Optional**_ finish setting up `conda` with the following:
    ```cmd
    conda update -n base conda mamba
    ```
