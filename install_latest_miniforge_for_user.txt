@@ -33,11 +33,11 @@ if exist %UserProfile%\miniforge3 (
 
 :installminiforge
 echo installing conda via miniforge (aka license-free and open source!)...
-curl -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
+curl -k -L "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe" -o miniforge3.exe
 start /wait "" .\miniforge3.exe /InstallationType=JustMe /RegisterPython=0 /AddToPath=1 /S /D=%UserProfile%\miniforge3
 echo installation complete.
 echo initializing conda for cmd prompt...
-%USERPROFILE%\miniforge3\condabin\conda init cmd.exe
+%UserProfile%\miniforge3\condabin\conda init cmd.exe
 echo initialization complete.
 goto commonexit
 
